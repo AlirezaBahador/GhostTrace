@@ -1,0 +1,44 @@
+name: Go checks (no kernel privileges)
+on:
+  push:
+  pull_request:
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: false
+      - name: Install BPF compiler
+        run: sudo apt-get update && sudo apt-get install -y clang llvm linux-libc-dev
+      - name: Dependency download
+        run: go mod download
+      - name: Go format
+        run: test -z "$(gofmt -l cmd internal pkg)"
+      - name: Build unprivileged JSONL analyzer
+        run: make analyze query server
+      - name: Test read-only server CLI executable
+        run: ./build/ghosttrace-server -listen 0.0.0.0:7766 -events /dev/null && exit 1 || test $? -eq 2
+      - name: Unprivileged empty-file HTTP API smoke test
+        run: bash tests/integration/api.sh
+      - name: Test YAML rule validation and offline replay
+        run: ./build/ghosttrace-analyze -rules rules -input /dev/null
+      - name: Go vet
+        run: go vet ./...
+      - name: Unit tests
+        run: go test -count=1 ./...
+      - name: Race tests
+        run: go test -race -count=1 ./...
+      - name: BPF and agent build
+        run: make build CLANG=/usr/bin/clang
+      - name: Basic ELF inspection
+        run: file build/process.bpf.o && file build/ghosttrace-agent
+      # VM kernel integration tests require separate privileged infrastructure.
+      - name: Dependency vulnerability scan
+        uses: golang/govulncheck-action@v1
+        with:
+          go-version-file: go.mod
+          cache: false
+          repo-checkout: false

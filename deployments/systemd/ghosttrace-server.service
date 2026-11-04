@@ -1,0 +1,23 @@
+# Example only. API deliberately only binds to localhost and reads local logs.
+[Unit]
+Description=GhostTrace read-only local investigation API
+After=ghosttrace-agent.service
+
+[Service]
+Type=simple
+User=ghosttrace
+Group=ghosttrace
+ExecStart=/usr/local/bin/ghosttrace-server -listen 127.0.0.1:7766 -events /var/log/ghosttrace/events.jsonl -rules /etc/ghosttrace/rules
+Environment=GHOSTTRACE_API_TOKEN=
+Restart=on-failure
+UMask=0077
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ProtectKernelTunables=true
+ProtectControlGroups=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+
+[Install]
+WantedBy=multi-user.target

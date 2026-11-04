@@ -1,0 +1,11 @@
+# Experimental fallback file retention. copytruncate may lose records during
+# the copy/truncate window; do not claim lossless or exactly-once delivery.
+/var/log/ghosttrace/events.jsonl {
+  daily
+  size 20M
+  rotate 5
+  compress
+  missingok
+  notifempty
+  copytruncate
+}

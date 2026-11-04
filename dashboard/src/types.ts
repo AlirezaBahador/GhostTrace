@@ -1,0 +1,14 @@
+export type Host = { hostname: string; boot_id: string };
+export type ProcessInfo = { pid: number; tid: number; uid: number; gid: number; comm: string; executable?: string;
+  identity?: string; identity_source?: string; ppid?: number; parent?: { pid: number; comm: string; identity?: string } };
+export type Detection = { rule_id: string; rule_name: string; severity: string; triggering_event_ids: string[];
+  matched_conditions: string[]; mitre_techniques?: string[] };
+export type Event = { schema_version: string; event_id: string; event_type: string; timestamp: string;
+  timestamp_source: string; kernel_monotonic_ns?: number; host: Host; process: ProcessInfo; detection?: Detection; source: string };
+export type Page<T> = { items: T[]; total: number; offset: number; limit: number; next_offset: number | null };
+export type ProcessView = { identity: string; process: ProcessInfo; last_event_id: string; last_event_type: string; last_observed: string };
+export type Tree = { root: string; nodes: ProcessView[]; edges: { from: string; to: string }[];
+  complete: boolean; semantics: string };
+export type Rule = { id: string; name: string; enabled: boolean; severity: string; mitre_techniques?: string[] };
+export type Metrics = { recorded_events: number; recorded_alerts: number; scope: string; kernel_drops: number | null; agent_cpu: number | null };
+export type Health = { status: string; mode: string; agent_status: string; source_bytes: number };

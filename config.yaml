@@ -1,0 +1,13 @@
+# GhostTrace flat YAML configuration (no nested mappings).
+# Relative paths resolve relative to this file.
+bpf_object: ./build/process.bpf.o
+log_level: info
+# Optional procfs enrichment; executable pathname collection is opt-in.
+enrich_procfs: true
+include_executable: false
+# Optional: rules are validated before any BPF programs are loaded.
+# rules_path: ./rules
+# Optional: filter raw JSONL only (rules still see all events; alerts always output).
+# include_comm: nginx, sh, bash
+# include_uid: 0, 33
+# include_event_type: process_exec, process_exit
