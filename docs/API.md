@@ -66,4 +66,4 @@ cd ..
 # Open http://127.0.0.1:7766/
 ```
 
-`npm install` needs a reachable npm registry. No `package-lock.json` was generated in the offline build environment, so **the dashboard dependency lock, compile, and browser tests are outstanding**. Once dependencies are resolved, commit the generated lockfile, run `npm ci` and `npm run build` in CI. For `npm run dev`, Vite proxies `/api/` to the default loopback Go server port 7766. The token input in the dashboard is kept in browser memory, not localStorage, and used only for HTTP requests.
+`npm install` needs a reachable npm registry. The audit branch includes a `package-lock.json` generated on a connected GitHub runner, and the dashboard production build passed in GitHub Actions. Browser end-to-end and API integration security tests remain outstanding. For `npm run dev`, Vite proxies `/api/` to the default loopback Go server port 7766. The token input in the dashboard is kept in browser memory, not localStorage, and used only for HTTP requests. Start the server with `GHOSTTRACE_API_TOKEN` set, and enter the same token in the dashboard's API access control.
