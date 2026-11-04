@@ -35,7 +35,8 @@ jobs:
       - name: Inspect eBPF ELF and agent binary
         run: |
           file build/process.bpf.o build/ghosttrace-agent
-          llvm-readelf -h build/process.bpf.o | grep -E 'Machine:.*Linux BPF'
+          llvm-readelf -h build/process.bpf.o
+          file build/process.bpf.o | grep -E 'ELF.*eBPF'
           file build/ghosttrace-agent | grep 'ELF'
       - name: Validate rule files and replay empty stream
         run: ./build/ghosttrace-analyze -rules rules -input /dev/null
