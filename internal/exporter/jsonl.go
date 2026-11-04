@@ -7,7 +7,7 @@ import (
 	"io"
 	"sync"
 
-	"github.com/ghosttrace/ghosttrace/pkg/events"
+	"github.com/AlirezaBahador/GhostTrace/pkg/events"
 )
 
 // JSONL writes one complete event per line, synchronously. It has no unbounded

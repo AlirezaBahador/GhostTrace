@@ -11,7 +11,7 @@ import (
 	"github.com/cilium/ebpf"
 	"github.com/cilium/ebpf/link"
 	"github.com/cilium/ebpf/ringbuf"
-	"github.com/ghosttrace/ghosttrace/internal/decoder"
+	"github.com/AlirezaBahador/GhostTrace/internal/decoder"
 )
 
 // Collector owns the kernel links, collection, and bounded ring reader.

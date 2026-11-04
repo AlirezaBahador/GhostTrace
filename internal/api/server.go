@@ -14,10 +14,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ghosttrace/ghosttrace/internal/detection"
-	"github.com/ghosttrace/ghosttrace/internal/eventio"
-	"github.com/ghosttrace/ghosttrace/internal/filter"
-	"github.com/ghosttrace/ghosttrace/pkg/events"
+	"github.com/AlirezaBahador/GhostTrace/internal/detection"
+	"github.com/AlirezaBahador/GhostTrace/internal/eventio"
+	"github.com/AlirezaBahador/GhostTrace/internal/filter"
+	"github.com/AlirezaBahador/GhostTrace/pkg/events"
 )
 
 const (

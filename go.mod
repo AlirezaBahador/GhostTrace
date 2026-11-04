@@ -1,4 +1,4 @@
-module github.com/ghosttrace/ghosttrace
+module github.com/AlirezaBahador/GhostTrace
 
 go 1.23.2
 

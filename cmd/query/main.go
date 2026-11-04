@@ -12,10 +12,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ghosttrace/ghosttrace/internal/eventio"
-	"github.com/ghosttrace/ghosttrace/internal/exporter"
-	"github.com/ghosttrace/ghosttrace/internal/filter"
-	"github.com/ghosttrace/ghosttrace/pkg/events"
+	"github.com/AlirezaBahador/GhostTrace/internal/eventio"
+	"github.com/AlirezaBahador/GhostTrace/internal/exporter"
+	"github.com/AlirezaBahador/GhostTrace/internal/filter"
+	"github.com/AlirezaBahador/GhostTrace/pkg/events"
 )
 
 const MaxSelectors = 64

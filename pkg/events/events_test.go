@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ghosttrace/ghosttrace/internal/decoder"
+	"github.com/AlirezaBahador/GhostTrace/internal/decoder"
 )
 
 func TestFromRecordAndJSONSchema(t *testing.T) {

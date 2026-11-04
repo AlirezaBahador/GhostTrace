@@ -15,7 +15,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/ghosttrace/ghosttrace/internal/api"
+	"github.com/AlirezaBahador/GhostTrace/internal/api"
 )
 
 func run() int {

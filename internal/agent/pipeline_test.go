@@ -6,8 +6,8 @@ import (
 	"io"
 	"testing"
 
-	"github.com/ghosttrace/ghosttrace/internal/decoder"
-	"github.com/ghosttrace/ghosttrace/pkg/events"
+	"github.com/AlirezaBahador/GhostTrace/internal/decoder"
+	"github.com/AlirezaBahador/GhostTrace/pkg/events"
 )
 
 type addParent struct{}

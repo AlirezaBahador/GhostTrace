@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ghosttrace/ghosttrace/pkg/events"
+	"github.com/AlirezaBahador/GhostTrace/pkg/events"
 )
 
 func TestPolicyMatchingANDAndAlertFields(t *testing.T) {

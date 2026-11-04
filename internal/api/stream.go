@@ -10,8 +10,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/ghosttrace/ghosttrace/internal/eventio"
-	"github.com/ghosttrace/ghosttrace/pkg/events"
+	"github.com/AlirezaBahador/GhostTrace/internal/eventio"
+	"github.com/AlirezaBahador/GhostTrace/pkg/events"
 )
 
 // stream follows only bytes APPENDED after connection time (best effort).

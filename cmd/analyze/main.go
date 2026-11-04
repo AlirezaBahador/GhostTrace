@@ -9,10 +9,10 @@ import (
 	"io"
 	"os"
 
-	"github.com/ghosttrace/ghosttrace/internal/detection"
-	"github.com/ghosttrace/ghosttrace/internal/eventio"
-	"github.com/ghosttrace/ghosttrace/internal/exporter"
-	"github.com/ghosttrace/ghosttrace/pkg/events"
+	"github.com/AlirezaBahador/GhostTrace/internal/detection"
+	"github.com/AlirezaBahador/GhostTrace/internal/eventio"
+	"github.com/AlirezaBahador/GhostTrace/internal/exporter"
+	"github.com/AlirezaBahador/GhostTrace/pkg/events"
 )
 
 const MaxJSONLine = eventio.MaxLine

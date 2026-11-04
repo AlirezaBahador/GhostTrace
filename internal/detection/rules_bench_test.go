@@ -1,7 +1,7 @@
 package detection
 
 import (
-	"github.com/ghosttrace/ghosttrace/pkg/events"
+	"github.com/AlirezaBahador/GhostTrace/pkg/events"
 	"testing"
 	"time"
 )
