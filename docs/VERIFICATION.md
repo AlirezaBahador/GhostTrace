@@ -1,4 +1,4 @@
-# Verification record — GhostTrace source package
+\n> **2026-11-04 P0 audit verification addendum:** GitHub Actions run `41837303762` for commit `b49e70c` completed successfully in Go/Agent/BPF build, dashboard build, and vulnerability scan jobs. This is a BPF object compile and userspace test result, not a live kernel attach/integration result. See [P0 audit](AUDIT_2026-11-04.md). The historical offline test results below describe the initial build environment.\n# Verification record — GhostTrace source package
 
 ## Source and runtime inspected (2026-11-04)
 
