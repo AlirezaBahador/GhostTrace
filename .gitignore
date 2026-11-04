@@ -1,0 +1,12 @@
+/build/
+*.test
+*.out
+*.log
+.DS_Store
+/dashboard/node_modules/
+/dashboard/dist/
+/dashboard/.vite/
+/events.jsonl
+*.db
+*.db-shm
+*.db-wal

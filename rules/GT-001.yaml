@@ -1,0 +1,19 @@
+# Example only. Rules are opt-in via config.yaml rules_path.
+id: GT-001
+name: Web Server Spawned Shell
+description: Web server process observed as parent of a shell execution.
+enabled: true
+severity: high
+conditions:
+  parent_process:
+    - nginx
+    - apache2
+  child_process:
+    - sh
+    - bash
+    - dash
+mitre:
+  techniques:
+    - T1059
+actions:
+  - alert
