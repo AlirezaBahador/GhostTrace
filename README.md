@@ -9,11 +9,11 @@
 ```bash
 # Tested offline (standard library-only Go components)
 make analyze query server
-./build/ghosttrace-server -events ./events.jsonl -rules ./rules
-# From a second terminal: curl 'http://127.0.0.1:7766/api/v1/events?order=desc&limit=20'
+# For local testing use -allow-unauthenticated-loopback; for normal operation set GHOSTTRACE_API_TOKEN.\nexport GHOSTTRACE_API_TOKEN="$(openssl rand -hex 32)"\n./build/ghosttrace-server -events ./events.jsonl -rules ./rules
+# From a second terminal with the same token exported:\n# curl -H "Authorization: Bearer $GHOSTTRACE_API_TOKEN" 'http://127.0.0.1:7766/api/v1/events?order=desc&limit=20'
 ```
 
-The API requires an **existing JSONL file**, which may be produced by running the kernel agent in a capable Linux VM (not verified here). It does not create fake telemetry or start eBPF itself. It binds only to loopback, optionally checks a Bearer token from `GHOSTTRACE_API_TOKEN`, supports limited filtering/pagination, observed process graphs, rule metadata, and best-effort SSE of appended events. The optional dark React dashboard reads that API; its source lives in [`dashboard/`](dashboard/). To build the dashboard on a network-connected host: `cd dashboard && npm install && npm run build`. React dependencies and their lockfile have **not yet been resolved or tested**. Review [`docs/API.md`](docs/API.md) before exposing sensitive metadata.
+The API requires an **existing JSONL file**, which may be produced by running the kernel agent in a capable Linux VM (not verified here). It does not create fake telemetry or start eBPF itself. It binds only to loopback, requires a Bearer token from `GHOSTTRACE_API_TOKEN` by default, supports limited filtering/pagination, observed process graphs, rule metadata, and best-effort SSE of appended events. The optional dark React dashboard reads that API; its source lives in [`dashboard/`](dashboard/). To build the dashboard on a network-connected host: `cd dashboard && npm ci && npm run build`. The dashboard lockfile is committed on the audit branch and the GitHub CI build has passed; browser end-to-end tests are not yet complete. Review [`docs/API.md`](docs/API.md) before exposing sensitive metadata.
 
 
 **Observe Processes. Correlate Behavior. Detect Threats.**
