@@ -14,7 +14,7 @@ The kernel integration script is **privilege-gated**: it exits with an error if 
 
 ## Dependency lock and initial publication
 
-The module currently declares `github.com/cilium/ebpf v0.17.3`. The build environment used for this initial source delivery cannot reach Go's module proxy, so a verified `go.sum` could not be generated. **Before tagging v0.1.0**, on a network-connected trusted machine run:
+**Historical baseline (superseded by P0 audit changes):** The module originally declared `github.com/cilium/ebpf v0.17.3`. The build environment used for this initial source delivery cannot reach Go's module proxy, so a verified `go.sum` could not originally be generated. The audit branch now commits one generated on a connected runner. **Before tagging v0.1.0**, on a network-connected trusted machine run:
 
 ```sh
 go mod tidy
