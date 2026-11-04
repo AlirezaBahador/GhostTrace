@@ -1,4 +1,4 @@
-> **Audit update (2026-11-04):** The working audit branch addresses module naming, generates lockfiles through a connected GitHub runner and requires explicit API auth. A dependency vulnerability in cilium/ebpf v0.17.3 required upgrading to v0.22.0 (Go >= 1.25), pending a clean CI run. See [audit](AUDIT_2026-11-04.md). This report contains historical entries and the project is still NOT READY to release.
+> **Audit update (2026-11-04):** The working audit branch addresses module naming, generates lockfiles through a connected GitHub runner and requires explicit API auth. A dependency vulnerability in cilium/ebpf v0.17.3 required upgrading to v0.22.0 (Go >= 1.25), CI run `41837303762` (commit `b49e70c`) passed Go+BPF compilation, tests, dashboard build and govulncheck. **Kernel loading was NOT tested**, and release remains blocked. See [audit](AUDIT_2026-11-04.md). This report contains historical entries and the project is still NOT READY to release.
 
 # Release gates and implementation status (2026-11-04)
 
