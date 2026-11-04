@@ -1,3 +1,5 @@
+> **Audit update (2026-11-04):** The working audit branch addresses module naming, generates lockfiles through a connected GitHub runner and requires explicit API auth. A dependency vulnerability in cilium/ebpf v0.17.3 required upgrading to v0.22.0 (Go >= 1.25), pending a clean CI run. See [audit](AUDIT_2026-11-04.md). This report contains historical entries and the project is still NOT READY to release.
+
 # Release gates and implementation status (2026-11-04)
 
 GhostTrace is **not a completed production-grade endpoint detection and response product**. The repository is an incremental engineering project. Do not tag or market it as a verified `v0.1.0` until all Phase-1 gates pass.

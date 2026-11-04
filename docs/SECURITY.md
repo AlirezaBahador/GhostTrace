@@ -22,7 +22,7 @@ Parent and process identifiers based on procfs are best-effort and can race with
 
 ## Loss, trust, dependencies
 
-The ringbuf reserve-failure counter is **not** a complete lost-event rate. JSONL is synchronous and may block, and an unclean shutdown can lose events. There is no durable output queue or exactly-once guarantee. `go.sum` needs to be generated/committed from a connected build host prior to release. Run unit, race, static, privileged kernel and performance tests before deployment. The delivered files were not security audited and the full agent was not compiled or kernel-verified in this environment. Future network-facing backends must use authenticated TLS; this experimental backend already enforces loopback binding and loopback Host headers. The CLI now requires a Bearer token by default; unauthenticated loopback is an explicit insecure development opt-in.
+The ringbuf reserve-failure counter is **not** a complete lost-event rate. JSONL is synchronous and may block, and an unclean shutdown can lose events. There is no durable output queue or exactly-once guarantee. Dependency lockfiles were generated on a connected GitHub runner in the audit branch; upgraded dependency versions must be revalidated in CI. Run unit, race, static, privileged kernel and performance tests before deployment. The delivered files were not security audited and the full agent was not compiled or kernel-verified in this environment. Future network-facing backends must use authenticated TLS; this experimental backend already enforces loopback binding and loopback Host headers. The CLI now requires a Bearer token by default; unauthenticated loopback is an explicit insecure development opt-in.
 
 ## Licensing
 

@@ -1,3 +1,5 @@
+> **Audit update:** See [P0 audit findings and verification](docs/AUDIT_2026-11-04.md). API authentication is mandatory by default; the eBPF/kernel path remains unverified.
+
 # GhostTrace
 
 > **Engineering status — 2026-11-04.** GhostTrace has a real eBPF process-probe *source implementation* and tested unprivileged Go components: a JSONL analyzer, query CLI, and a bounded, read-only JSONL REST/SSE API. A React/TypeScript dashboard has source but **has not been built** because npm packages are unavailable in this environment. **Kernel BPF compilation, agent full build, and privileged integration tests remain unverified.** Network/file hooks and SQLite are not implemented. Do not represent this repository as a fully functional EDR or a released, VM-verified v0.1.0. See [release status](docs/RELEASE_STATUS.md) and [API reference](docs/API.md).
@@ -88,7 +90,7 @@ clang -target bpf -c -x c /dev/null -o /tmp/gt-bpf-check.o  # verify BPF backend
 
 ```bash
 # From the project root; on first network-connected build:
-go mod tidy                  # then commit generated go.sum to the repository
+go mod download              # use committed go.sum; do not handcraft checksums
 make build CLANG=/usr/bin/clang
 
 # Validate config and rules without BPF privileges:
