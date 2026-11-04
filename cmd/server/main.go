@@ -15,7 +15,7 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/ghosttrace/ghosttrace/internal/api"
+	"github.com/AlirezaBahador/GhostTrace/internal/api"
 )
 
 func run() int {
@@ -23,7 +23,8 @@ func run() int {
 	input := flag.String("events", "events.jsonl", "recorded JSONL file")
 	rules := flag.String("rules", "", "optional YAML rule directory/file")
 	dashboardDir := flag.String("dashboard-dir", "", "optional built React dashboard/dist directory")
-	tokenEnv := flag.String("token-env", "GHOSTTRACE_API_TOKEN", "environment variable containing optional Bearer token")
+	tokenEnv := flag.String("token-env", "GHOSTTRACE_API_TOKEN", "environment variable containing the required Bearer token")
+	allowDevNoAuth := flag.Bool("allow-unauthenticated-loopback", false, "explicit INSECURE local development only; all local users can access telemetry")
 	maxFileMB := flag.Int64("max-file-mb", 64, "maximum recorded file size (1..1024 MiB)")
 	flag.Parse()
 	host, _, err := net.SplitHostPort(*listen)
@@ -36,8 +37,8 @@ func run() int {
 		return 2
 	}
 	token := os.Getenv(*tokenEnv)
-	if len(token) > 4096 || len(token) > 0 && len(token) < 16 {
-		fmt.Fprintln(os.Stderr, "ghosttrace-server: token length must be 16..4096 bytes")
+	if err := validateAuth(token, *allowDevNoAuth); err != nil {
+		fmt.Fprintln(os.Stderr, "ghosttrace-server:", err)
 		return 2
 	}
 	handler, err := api.New(*input, *rules, token, *maxFileMB<<20)
@@ -88,4 +89,14 @@ func run() int {
 	}
 	return 0
 }
+func validateAuth(token string, allowDevNoAuth bool) error {
+	if token == "" && !allowDevNoAuth {
+		return fmt.Errorf("API token is required; supply GHOSTTRACE_API_TOKEN in a protected environment, or explicitly opt into insecure local development with -allow-unauthenticated-loopback")
+	}
+	if len(token) > 4096 || (len(token) > 0 && len(token) < 16) {
+		return fmt.Errorf("token length must be 16..4096 bytes")
+	}
+	return nil
+}
+
 func main() { os.Exit(run()) }

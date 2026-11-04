@@ -11,13 +11,13 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/ghosttrace/ghosttrace/internal/agent"
-	"github.com/ghosttrace/ghosttrace/internal/collector"
-	"github.com/ghosttrace/ghosttrace/internal/config"
-	"github.com/ghosttrace/ghosttrace/internal/detection"
-	"github.com/ghosttrace/ghosttrace/internal/exporter"
-	"github.com/ghosttrace/ghosttrace/internal/process"
-	"github.com/ghosttrace/ghosttrace/pkg/events"
+	"github.com/AlirezaBahador/GhostTrace/internal/agent"
+	"github.com/AlirezaBahador/GhostTrace/internal/collector"
+	"github.com/AlirezaBahador/GhostTrace/internal/config"
+	"github.com/AlirezaBahador/GhostTrace/internal/detection"
+	"github.com/AlirezaBahador/GhostTrace/internal/exporter"
+	"github.com/AlirezaBahador/GhostTrace/internal/process"
+	"github.com/AlirezaBahador/GhostTrace/pkg/events"
 )
 
 func main() { os.Exit(run()) }

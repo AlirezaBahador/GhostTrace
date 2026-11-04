@@ -14,7 +14,7 @@ The kernel integration script is **privilege-gated**: it exits with an error if 
 
 ## Dependency lock and initial publication
 
-The module currently declares `github.com/cilium/ebpf v0.17.3`. The build environment used for this initial source delivery cannot reach Go's module proxy, so a verified `go.sum` could not be generated. **Before tagging v0.1.0**, on a network-connected trusted machine run:
+**Historical baseline (superseded by P0 audit changes):** The module originally declared `github.com/cilium/ebpf v0.17.3`. The build environment used for this initial source delivery cannot reach Go's module proxy, so a verified `go.sum` could not originally be generated. The audit branch now commits one generated on a connected runner. **Before tagging v0.1.0**, on a network-connected trusted machine run:
 
 ```sh
 go mod tidy
@@ -58,3 +58,8 @@ curl 'http://127.0.0.1:7766/api/v1/metrics'
 ```
 
 Read `docs/API.md` for endpoint contracts and source semantics. Dashboard source is experimental; install dependencies on a connected host with `cd dashboard && npm install`, create/commit `package-lock.json`, and then run `npm run build` and browser tests. This environment could not perform the npm step. Run all available standard-library unit packages locally with `make test-userspace test-userspace-race`, but do not treat those results as eBPF kernel validation.
+
+
+## P0 dependency updates (2026-11-04)
+
+The audit branch switches the module to `github.com/AlirezaBahador/GhostTrace`, upgrades `github.com/cilium/ebpf` to v0.22.0 to address a govulncheck finding in v0.17.3, and raises the Go minimum to 1.25. This changes the minimum Go toolchain for the project. Regenerate/verify `go.sum` using `go mod tidy && go mod download && go mod verify` on a connected builder; compare and commit the generated result. The GitHub Actions build, not the offline environment, is the first integration validation for the upgraded dependency.

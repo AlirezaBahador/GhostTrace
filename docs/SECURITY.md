@@ -1,23 +1,38 @@
 # Security assumptions and limitations
 
-## Trust and privileges
+## Privileged kernel boundary
 
-GhostTrace attaches Linux eBPF tracepoints from a privileged process. BPF loading is a kernel attack surface; run on trusted kernels and maintain Go/Clang dependencies. Do not run the agent inside a broadly privileged container. On kernels with fine-grained privilege control, grant only capabilities required for BPF program load and tracepoint attachment (commonly CAP_BPF and CAP_PERFMON); the actual requirements depend on distribution policy. The program does not request escalation or alter firewall / process state.
+The BPF agent requires privileges to load and attach kernel programs; deploy on a trusted Linux VM/host with the minimum tested capabilities, typically `CAP_BPF` and `CAP_PERFMON` on modern kernels (or legacy `CAP_SYS_ADMIN` where necessary). Root inside a restricted container does not confer these capabilities. Do not run as a broadly privileged Docker container. BPF ELF objects are loaded from an administrator-chosen path; ensure that object is only writable by trusted admins. Unknown/untrusted BPF programs must never be loaded into a privileged agent.
 
-## Data protection
+## Sensitive data
 
-The JSONL stream includes process name, numeric UID/GID, host/boot identity, PID, monotonic time and UTC receive time. Process names and timing may be sensitive. Redirect stdout to a restricted file and protect collected logs under a restrictive `umask` (for example `umask 077`) or a host-managed logging service. `events.jsonl` in README is an example path, not an automatically secured database. GhostTrace never reads file contents or environment variables. It does not export arguments or executable paths in v0.1.
+Output includes host identifiers, PIDs, effective UIDs/GIDs, process names and timing. With `enrich_procfs: true`, best-effort parent/start time metadata is also included. `include_executable: false` is the default; enable it only if capturing executable symlink paths is necessary. No file content, process arguments, environment variables, network payloads, credentials or users' file data are captured. Logs can still reveal private process and filesystem context. Run with `umask 077` when redirecting stdout and protect collected data at rest/in transit.
 
-## Input safety
+## Rule and input safety
 
-Configuration is capped at 64 KiB; only two top-level keys in a restricted flat YAML subset are accepted. Missing/duplicate/unknown keys fail closed. The BPF object path is selected by an administrator and should be writable only by a trusted administrator; a malicious eBPF object is a serious threat. The decoder validates lengths, reserved fields, IDs and enum values. A malformed kernel record causes the agent to fail rather than silently reinterpret data.
+- Configuration limited to 64 KiB flat YAML subset, with strict duplicate/unknown-key rejection.
+- Rule files limited to 64 KiB each; up to 128 rules per directory. Unsupported syntax/actions fail configuration before attaching probes. A parser is **not** a full YAML parser; see `docs/DETECTION.md` for supported grammar.
+- Only administrator-controlled config/rules directories should be used; the privileged agent reads them during startup. Do not make them writable by untrusted users.
+- Offline analyzer rejects records larger than 1 MiB, unsupported schema shapes, unknown JSON fields and malformed inputs.
+- Event IDs use cryptographic randomness; detection evidence refers to a previously observed event ID. Rules are static until process restart. The read-only JSONL API listens on loopback and does not expose the agent's kernel handles.
 
-## Reliability and failure modes
+## Detection caveats
 
-Failure to read the BPF object, load maps, or attach either hook aborts startup. JSON write failures are fatal. The 1 MiB ring buffer bounds backlog but does not prevent loss. The `ringbuf_drops` metric counts only failed kernel reservations, **not** all imaginable missing events, and it is logged when the agent shuts down. The agent does not claim complete host visibility or endpoint protection.
+Parent and process identifiers based on procfs are best-effort and can race with reparenting, PID reuse and exit. `cached_exec_unverified` **does not** guarantee a safe correlation if a kernel record was missed. Unknown parent data causes parent-dependent rules to abstain. Name-only matching is weaker than hashing/verified executable identity, and a match is not proof of malicious activity. No response, termination or firewall change occurs.
 
-## Known open security work
+## Loss, trust, dependencies
 
-Production deployment still requires pinned/verifiable dependencies (`go.sum` is not yet generated), a tested packaging scheme, distro-by-distro capability restrictions, privileged integration testing, external audit, release signing, and load/performance testing. No remote server or API authentication exists yet because there is no API in phase 1.
+The ringbuf reserve-failure counter is **not** a complete lost-event rate. JSONL is synchronous and may block, and an unclean shutdown can lose events. There is no durable output queue or exactly-once guarantee. Dependency lockfiles were generated on a connected GitHub runner in the audit branch; upgraded dependency versions must be revalidated in CI. Run unit, race, static, privileged kernel and performance tests before deployment. The delivered files were not security audited and the full agent was not compiled or kernel-verified in this environment. Future network-facing backends must use authenticated TLS; this experimental backend already enforces loopback binding and loopback Host headers. The CLI now requires a Bearer token by default; unauthenticated loopback is an explicit insecure development opt-in.
 
-Please report security concerns privately to the repository maintainer once a public security contact has been established; do not publish exploit details or private host telemetry in issues.
+## Licensing
+
+GhostTrace is Apache-2.0. Architecture patterns were researched from public projects, but no upstream source was copied. Kunai uses GPL-3.0 and Tetragon has multiple license types: perform a component-level compatibility review and attribution before any future direct reuse.
+
+
+## Experimental JSONL API and dashboard
+
+- `cmd/server` binds **only to loopback**. Use a TLS reverse proxy / SSH tunnel for remote access; do not bind publicly and assume a bearer token makes plaintext safe. Required token is read from an environment variable and compared in constant time. Explicit `-allow-unauthenticated-loopback` mode permits any local process to read telemetry and should be used only for isolated development.
+- Input path and rule path are operator-specified startup arguments, not request parameters. Source read-only operations are capped at a configured regular-file size and max record length. Up to four simultaneous API handlers are admitted. Avoid exposing a sensitive JSONL file via insecure system log rotation or filesystem permissions.
+- SSE is **best effort** and can miss records on reconnect/rotation. Do not use it as a forensic audit log or replace the original stored telemetry. API process graphs and metrics describe only observed file content, not live kernel state.
+- Dashboard uses React text rendering for recorded fields, never HTML injection. Token is held only in JavaScript memory; do not enter it into untrusted hosts. Self-host assets; no CDN requirement. A production dashboard build and browser security testing have **not been performed** in this offline environment.
+- `deployments/systemd` and `deployments/logrotate` are **examples, not validated deployment profiles**. Capability requirements vary across kernels and distros. `copytruncate` log rotation can drop events. Check `systemd-analyze security`, runtime attach permissions, file retention and log ownership on the target host.

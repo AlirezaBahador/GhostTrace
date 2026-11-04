@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ghosttrace/ghosttrace/pkg/events"
+	"github.com/AlirezaBahador/GhostTrace/pkg/events"
 )
 
 const exampleRule = `id: GT-001

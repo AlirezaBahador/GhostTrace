@@ -11,7 +11,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/ghosttrace/ghosttrace/pkg/events"
+	"github.com/AlirezaBahador/GhostTrace/pkg/events"
 )
 
 const MaxLine = 1024 * 1024

@@ -13,7 +13,9 @@ chmod 0600 "$workdir/events.jsonl"
 # Choose a loopback port and ensure an occupied port fails rather than exiting
 # successfully with the wrong server. A VM may choose another local port.
 port="${GHOSTTRACE_API_TEST_PORT:-17766}"
-./build/ghosttrace-server -events "$workdir/events.jsonl" -listen "127.0.0.1:$port" > "$workdir/server.log" 2>&1 &
+# Only this empty-file test opts into unauthenticated localhost mode.
+# Production launches must provide a secret via a protected environment.
+./build/ghosttrace-server -events "$workdir/events.jsonl" -listen "127.0.0.1:$port" -allow-unauthenticated-loopback > "$workdir/server.log" 2>&1 &
 pid=$!
 ready=0
 for ((i=0;i<30;i++)); do

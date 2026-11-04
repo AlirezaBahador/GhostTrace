@@ -7,9 +7,9 @@ import (
 	"io"
 	"time"
 
-	"github.com/ghosttrace/ghosttrace/internal/decoder"
-	"github.com/ghosttrace/ghosttrace/internal/filter"
-	"github.com/ghosttrace/ghosttrace/pkg/events"
+	"github.com/AlirezaBahador/GhostTrace/internal/decoder"
+	"github.com/AlirezaBahador/GhostTrace/internal/filter"
+	"github.com/AlirezaBahador/GhostTrace/pkg/events"
 )
 
 // Source can be implemented by a kernel ring reader or a test fixture.

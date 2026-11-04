@@ -3,7 +3,7 @@
 # Capabilities vary by kernel/distro; do not add CAP_SYS_ADMIN without review.
 [Unit]
 Description=GhostTrace eBPF process monitoring agent (experimental)
-Documentation=https://github.com/ghosttrace/ghosttrace
+Documentation=https://github.com/AlirezaBahador/GhostTrace
 After=local-fs.target
 
 [Service]

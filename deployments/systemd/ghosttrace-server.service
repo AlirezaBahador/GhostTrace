@@ -8,7 +8,8 @@ Type=simple
 User=ghosttrace
 Group=ghosttrace
 ExecStart=/usr/local/bin/ghosttrace-server -listen 127.0.0.1:7766 -events /var/log/ghosttrace/events.jsonl -rules /etc/ghosttrace/rules
-Environment=GHOSTTRACE_API_TOKEN=
+EnvironmentFile=/etc/ghosttrace/server.env
+# Provision GHOSTTRACE_API_TOKEN in a root-managed, restricted file.
 Restart=on-failure
 UMask=0077
 NoNewPrivileges=true

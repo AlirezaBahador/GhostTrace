@@ -7,13 +7,14 @@ This API is a **real executable**, not a mock service. It reads an existing on-d
 ```bash
 make server
 # Use a file produced by the agent or the offline analyzer; no fabricated production events.
+export GHOSTTRACE_API_TOKEN="$(openssl rand -hex 32)"
 ./build/ghosttrace-server -events ./events.jsonl -rules ./rules -listen 127.0.0.1:7766
-curl -fsS 'http://127.0.0.1:7766/api/v1/events?limit=20&order=desc'
+curl -H "Authorization: Bearer $GHOSTTRACE_API_TOKEN" 'http://127.0.0.1:7766/api/v1/events?limit=20&order=desc'
 ```
 
 Start with an actual JSONL file. For example, on a compatible, privileged **Linux VM**, run the eBPF agent and redirect its stdout to a mode-0600 file. Kernel event collection in this source delivery has **not** been VM-verified. To inspect previously recorded data, start the server independently.
 
-Optional access token, configured without command-line secret exposure:
+Required access token, configured without command-line secret exposure:
 
 ```bash
 export GHOSTTRACE_API_TOKEN="$(openssl rand -hex 32)"
@@ -21,7 +22,7 @@ export GHOSTTRACE_API_TOKEN="$(openssl rand -hex 32)"
 curl -H "Authorization: Bearer $GHOSTTRACE_API_TOKEN" 'http://127.0.0.1:7766/api/v1/health'
 ```
 
-Only loopback binding is accepted by the CLI; the API also rejects non-loopback HTTP `Host` headers to reduce DNS-rebinding exposure. To access from another host, use an authenticated SSH tunnel or a security-reviewed TLS reverse proxy. A token transmitted over plain HTTP to a remote host is **not** sufficient security. The API does not set permissive CORS headers. JSON responses use `Cache-Control: no-store`. The token is optional only for local-only operation.
+Only loopback binding is accepted by the CLI; the API also rejects non-loopback HTTP `Host` headers to reduce DNS-rebinding exposure. To access from another host, use an authenticated SSH tunnel or a security-reviewed TLS reverse proxy. A token transmitted over plain HTTP to a remote host is **not** sufficient security. The API does not set permissive CORS headers. JSON responses use `Cache-Control: no-store`. A token is required by default even on loopback. The explicit `-allow-unauthenticated-loopback` flag is solely for trusted local development and is not recommended on multi-user machines.
 
 ## Endpoints (GET only)
 
@@ -65,4 +66,4 @@ cd ..
 # Open http://127.0.0.1:7766/
 ```
 
-`npm install` needs a reachable npm registry. No `package-lock.json` was generated in the offline build environment, so **the dashboard dependency lock, compile, and browser tests are outstanding**. Once dependencies are resolved, commit the generated lockfile, run `npm ci` and `npm run build` in CI. For `npm run dev`, Vite proxies `/api/` to the default loopback Go server port 7766. The token input in the dashboard is kept in browser memory, not localStorage, and used only for HTTP requests.
+`npm install` needs a reachable npm registry. The audit branch includes a `package-lock.json` generated on a connected GitHub runner, and the dashboard production build passed in GitHub Actions. Browser end-to-end and API integration security tests remain outstanding. For `npm run dev`, Vite proxies `/api/` to the default loopback Go server port 7766. The token input in the dashboard is kept in browser memory, not localStorage, and used only for HTTP requests. Start the server with `GHOSTTRACE_API_TOKEN` set, and enter the same token in the dashboard's API access control.

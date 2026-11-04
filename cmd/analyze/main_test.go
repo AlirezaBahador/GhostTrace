@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ghosttrace/ghosttrace/internal/detection"
-	"github.com/ghosttrace/ghosttrace/pkg/events"
+	"github.com/AlirezaBahador/GhostTrace/internal/detection"
+	"github.com/AlirezaBahador/GhostTrace/pkg/events"
 )
 
 func testEngine(t *testing.T) *detection.Engine {
